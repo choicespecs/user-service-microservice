@@ -5,15 +5,10 @@
 
 package com.choicespecs.e_commerce_proj_user_service.service;
 
-import org.springframework.stereotype.Service;
-import com.choicespecs.e_commerce_proj_user_service.model.User;
 /**
  *
  * @author metal
  */
-@Service
-public class UserProcessor {
-    public void handle(User user) {
-        System.out.println("Processing user: " + user.getUsername());
-    }
+public class UserService {
+
 }
