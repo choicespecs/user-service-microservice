@@ -10,7 +10,7 @@ package com.choicespecs.e_commerce_proj_user_service.model;
  * @author metal
  */
 public class User {
-    private Long id;
+    private String id;
     private String username;
     private String email;
     private String phone;
@@ -21,11 +21,11 @@ public class User {
     public User() {}
 
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

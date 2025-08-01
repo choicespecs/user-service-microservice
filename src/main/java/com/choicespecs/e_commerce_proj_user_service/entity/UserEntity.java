@@ -10,6 +10,8 @@ import java.time.Instant;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
+import com.choicespecs.e_commerce_proj_user_service.model.User;
+
 /**
  *
  * @author christopherlee
@@ -40,6 +42,16 @@ public class UserEntity {
         this.deleted = deleted;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    public UserEntity(User user) {
+        this.id = user.getId();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.phone = user.getPhone();
+        this.email = user.getEmail();
+        this.createdAt = Instant.now();
+        this.updatedAt = Instant.now();
     }
 
     public String getId() {
@@ -130,56 +142,4 @@ public class UserEntity {
         result = 31 * result + (updatedAt != null ? updatedAt.hashCode() : 0);
         return result;
     }   
-
-    public static Builder builder() {
-        return new Builder();
-    }
-    
-    public static class Builder {
-        private final UserEntity user = new UserEntity();  
-        
-        public Builder id(String id) {
-            user.setId(id);
-            return this;
-        }
-
-        public Builder email(String email) {
-            user.setEmail(email);
-            return this;
-        }
-
-        public Builder firstName(String firstName) {
-            user.setFirstName(firstName);
-            return this;
-        }
-
-        public Builder lastName(String lastName) {
-            user.setLastName(lastName);
-            return this;
-        }
-
-        public Builder phone(String phone) {
-            user.setPhone(phone);
-            return this;
-        }
-
-        public Builder deleted(boolean deleted) {
-            user.setDeleted(deleted);
-            return this;
-        }
-
-        public Builder createdAt(Instant createdAt) {
-            user.setCreatedAt(createdAt);
-            return this;
-        }
-
-        public Builder updatedAt(Instant updatedAt) {
-            user.setUpdatedAt(updatedAt);
-            return this;
-        }
-
-        public UserEntity build() {
-            return user;
-        }
-    }
 }
