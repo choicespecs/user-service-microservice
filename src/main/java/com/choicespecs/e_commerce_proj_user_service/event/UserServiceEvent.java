@@ -7,22 +7,27 @@ package com.choicespecs.e_commerce_proj_user_service.event;
 
 import org.springframework.context.ApplicationEvent;
 
-import com.choicespecs.e_commerce_proj_user_service.model.User;
-
 /**
  *
  * @author christopherlee
  */
-public class UserCreatedEvent extends ApplicationEvent {
-    private final User user;
+public class UserServiceEvent extends ApplicationEvent {
+    private EventType type;
 
-    public UserCreatedEvent(Object source, User user) {
+    public UserServiceEvent(Object source, EventType type) {
         super(source);
-        this.user = user;
+        this.type = type;
     }
 
-    public User getUser() {
-        return user;
+    public EventType getType() {
+        return type;
+    }
+
+    public enum EventType {
+        CREATED,
+        DELETED,
+        UPDATED,
+        GET
     }
 
 

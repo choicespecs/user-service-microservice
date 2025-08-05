@@ -7,7 +7,6 @@ package com.choicespecs.e_commerce_proj_user_service.service;
 
 import org.springframework.stereotype.Service;
 
-import com.choicespecs.e_commerce_proj_user_service.entity.UserEntity;
 import com.choicespecs.e_commerce_proj_user_service.event.EventPublisher;
 import com.choicespecs.e_commerce_proj_user_service.model.User;
 import com.choicespecs.e_commerce_proj_user_service.repository.UserRepository;
@@ -27,8 +26,7 @@ public class UserService {
     }
 
     public void createUser(User user) {
-        UserEntity userEntity = new UserEntity(user);
-        userRepository.save(userEntity);
-        eventPublisher.publishUserCreatedEvent(this, user);
+        userRepository.save(user.toEntity());
+        eventPublisher.publishUserCreatedEvent(this);
     }
 }

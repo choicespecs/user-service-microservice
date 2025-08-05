@@ -8,8 +8,6 @@ package com.choicespecs.e_commerce_proj_user_service.event;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
-import com.choicespecs.e_commerce_proj_user_service.model.User;
-
 /**
  *
  * @author christopherlee
@@ -22,8 +20,8 @@ public class EventPublisher {
         this.applicationEventPublisher = applicationEventPublisher;
     }
 
-    public void publishUserCreatedEvent(Object source, User user) {
-        UserCreatedEvent event = new UserCreatedEvent(source, user);
+    public void publishUserCreatedEvent(Object source) {
+        UserServiceEvent event = new UserServiceEvent(source, UserServiceEvent.EventType.CREATED);
         applicationEventPublisher.publishEvent(event);
     }
 

@@ -32,9 +32,8 @@ public class UserEntity {
 
     public UserEntity() {}
 
-    public UserEntity(String id, String email, String firstName, String lastName,
+    public UserEntity(String email, String firstName, String lastName,
                       String phone, boolean deleted, Instant createdAt, Instant updatedAt) {
-        this.id = id;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -45,7 +44,6 @@ public class UserEntity {
     }
 
     public UserEntity(User user) {
-        this.id = user.getId();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.phone = user.getPhone();

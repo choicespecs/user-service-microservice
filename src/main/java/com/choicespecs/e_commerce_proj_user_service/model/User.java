@@ -4,13 +4,13 @@
  */
 
 package com.choicespecs.e_commerce_proj_user_service.model;
+import com.choicespecs.e_commerce_proj_user_service.entity.UserEntity;
 
 /**
  *
  * @author metal
  */
 public class User {
-    private String id;
     private String username;
     private String email;
     private String phone;
@@ -19,15 +19,6 @@ public class User {
     
 
     public User() {}
-
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getUsername() {
         return username;
@@ -69,25 +60,16 @@ public class User {
         this.lastName = lastName;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                '}';
+    public UserEntity toEntity() {
+        return new UserEntity(this);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof User)) return false;
         User user = (User) o;
-        return id != null && id.equals(user.id) &&
-                username != null && username.equals(user.username) &&
+        return username != null && username.equals(user.username) &&
                 email != null && email.equals(user.email) &&
                 phone != null && phone.equals(user.phone) &&
                 firstName != null && firstName.equals(user.firstName) &&
@@ -96,18 +78,12 @@ public class User {
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (username != null ? username.hashCode() :
-                0);
-        result = 31 * result + (email != null ? email.hashCode() :
-                0);
-        result = 31 * result + (phone != null ? phone.hashCode() :
-                0); 
-        result = 31 * result + (firstName != null ? firstName.hashCode() :
-                0);
-        result = 31 * result + (lastName != null ? lastName.hashCode() :
-                0);
-        return result;  
+        int result = username != null ? username.hashCode() : 0;
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (phone != null ? phone.hashCode() : 0);
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        return result;
     }
 }
  

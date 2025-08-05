@@ -12,7 +12,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.choicespecs.e_commerce_proj_user_service.event.UserCreatedEvent;
+import com.choicespecs.e_commerce_proj_user_service.event.UserServiceEvent;
 
 /**
  *
@@ -28,9 +28,9 @@ public class EventPublisherConfig {
         return new ApplicationEventPublisher() {
             @Override
             public void publishEvent(ApplicationEvent event) {
-                if (event instanceof UserCreatedEvent) {
-                    UserCreatedEvent userCreatedEvent = (UserCreatedEvent) event;
-                    rabbitTemplate.convertAndSend("user.created", userCreatedEvent.getUser());
+                if (event instanceof UserServiceEvent) {
+                    UserServiceEvent userCreatedEvent = (UserServiceEvent) event;
+                    rabbitTemplate.convertAndSend("user.service", userCreatedEvent);
                 }
             }
 
