@@ -5,8 +5,10 @@
 
 package com.choicespecs.e_commerce_proj_user_service.event;
 
-import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
+
+import com.choicespecs.e_commerce_proj_user_service.entity.UserEntity;
 
 /**
  *
@@ -14,15 +16,18 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class EventPublisher {
-    private final ApplicationEventPublisher applicationEventPublisher;
+    private final RabbitTemplate rabbitTemplate;
 
-    public EventPublisher(ApplicationEventPublisher applicationEventPublisher) {
-        this.applicationEventPublisher = applicationEventPublisher;
+    private static final String USER_EXCHANGE = "user.exchange";
+    private static final String USER_CREATED_ROUTING_KEY = "user.created";
+
+    public EventPublisher(RabbitTemplate rabbitTemplate) {
+        this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void publishUserCreatedEvent(Object source) {
-        UserServiceEvent event = new UserServiceEvent(source, UserServiceEvent.EventType.CREATED);
-        applicationEventPublisher.publishEvent(event);
+    public void publishUserCreatedEvent(UserEntity user) {
+        UserServiceCreatedEvent event = new UserServiceCreatedEvent(user);
+        rabbitTemplate.convertAndSend(USER_EXCHANGE, USER_CREATED_ROUTING_KEY,event);
     }
 
 }
