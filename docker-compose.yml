@@ -1,0 +1,42 @@
+version: '3.8'
+services:
+  user-service:
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/user_db
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_RABBITMQ_HOST: rabbitmq         # ✅ tell Spring where RabbitMQ is
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
+    depends_on:
+      - postgres
+      - rabbitmq
+    networks:
+      - backend
+
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: user_db
+    ports:
+      - "5432:5432"
+    networks:
+      - backend
+
+  rabbitmq:
+    image: rabbitmq:3-management  # optional management UI at :15672
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - backend
+
+networks:
+  backend:
