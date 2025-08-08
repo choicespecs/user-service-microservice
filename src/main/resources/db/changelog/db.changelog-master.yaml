@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-users
+      author: you
+      changes:
+        - sqlFile:
+            path: 001-create-users.sql
+            relativeToChangelogFile: true
+            splitStatements: false
+            stripComments: false
+  - changeSet:
+      id: 002-seed-users
+      author: you
+      changes:
+        - sqlFile:
+            path: 002-seed-users.sql
+            relativeToChangelogFile: true

@@ -14,7 +14,7 @@ import com.choicespecs.e_commerce_proj_user_service.entity.UserEntity;
  * @author christopherlee
  */
 public class UserServiceCreatedEvent {
-    private String userId;
+    private Long userId;
     private String email;
     private Instant createdAt;
 
@@ -26,11 +26,11 @@ public class UserServiceCreatedEvent {
         this.createdAt = user.getCreatedAt();
     }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

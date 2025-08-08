@@ -19,7 +19,7 @@ import com.choicespecs.e_commerce_proj_user_service.model.User;
 @Table("users")
 public class UserEntity {
     @Id
-    private String id;
+    private Long id;
 
     private String email;
     private String firstName;
@@ -52,10 +52,10 @@ public class UserEntity {
         this.updatedAt = Instant.now();
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
     public String getEmail() {
