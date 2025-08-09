@@ -29,7 +29,7 @@ public class UserServiceListener {
     private static final String USER_FIELD = "user";
 
     private static final String ERROR_MISSING_FIELD = "Missing required fields in message";
-    private static final String ERROR_PROCESSING_FAIL = "Failed to process message: {}";
+    private static final String ERROR_PROCESSING_FAIL = "Failed to process message";
     private static final String ERROR_CREATE_USER_FAIL = "Failed to create user";
 
     private static final String USER_QUEUE = "user-service-queue";
@@ -42,9 +42,8 @@ public class UserServiceListener {
     private ObjectMapper objectMapper;
 
     @RabbitListener(queues = USER_QUEUE)
-    public void receiveMessage(String message) {
+    public void receiveMessage(JsonNode jsonNode) {
         try {
-            JsonNode jsonNode = objectMapper.readTree(message);
             if (!jsonNode.has(ACTION_FIELD)) {
                 throw new IllegalArgumentException(ERROR_MISSING_FIELD);
             }
@@ -56,7 +55,7 @@ public class UserServiceListener {
                     break;
             }
         } catch (Exception e) {
-            log.error(ERROR_PROCESSING_FAIL, message, e);
+            log.error(ERROR_PROCESSING_FAIL, e);
         }
     }
 

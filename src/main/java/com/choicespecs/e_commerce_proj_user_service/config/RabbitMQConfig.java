@@ -26,7 +26,7 @@ public class RabbitMQConfig {
     public static final String USER_QUEUE = "user-service-queue";
     public static final String USER_EXCHANGE = "user.exchange";
     public static final String USER_ROUTING_KEY = "user.created";
-    @Bean
+    @Bean   
     public Jackson2JsonMessageConverter messageConverter() {
         return new Jackson2JsonMessageConverter();
     }
@@ -50,10 +50,9 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory,
-                                         Jackson2JsonMessageConverter messageConverter) {
+    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
         RabbitTemplate template = new RabbitTemplate(connectionFactory);
-        template.setMessageConverter(messageConverter);
+        template.setMessageConverter(messageConverter());
         return template;
     }
 }

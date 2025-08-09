@@ -6,6 +6,7 @@
 package com.choicespecs.e_commerce_proj_user_service.entity;
 
 import java.time.Instant;
+import java.util.UUID;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
@@ -18,8 +19,9 @@ import com.choicespecs.e_commerce_proj_user_service.model.User;
  */
 @Table("users")
 public class UserEntity {
+
     @Id
-    private Long id;
+    private UUID id;
 
     private String email;
     private String firstName;
@@ -52,12 +54,13 @@ public class UserEntity {
         this.updatedAt = Instant.now();
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
+
     public String getEmail() {
         return email;
     }

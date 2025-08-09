@@ -8,6 +8,7 @@ databaseChangeLog:
             relativeToChangelogFile: true
             splitStatements: false
             stripComments: false
+
   - changeSet:
       id: 002-seed-users
       author: you

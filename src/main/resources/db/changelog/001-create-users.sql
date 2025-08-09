@@ -1,5 +1,8 @@
+-- 001-create-users.sql
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
 CREATE TABLE users (
-    id VARCHAR(64) PRIMARY KEY NOT NULL,
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
     email TEXT NOT NULL UNIQUE,
     first_name TEXT,
     last_name TEXT,
@@ -9,17 +12,16 @@ CREATE TABLE users (
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- Optional index
 CREATE INDEX idx_users_deleted ON users(deleted);
 
--- Optional updated_at trigger
+-- updated_at trigger
 CREATE OR REPLACE FUNCTION set_updated_at()
-RETURNS TRIGGER AS $$
+RETURNS TRIGGER AS $func$
 BEGIN
     NEW.updated_at = NOW();
     RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
+END
+$func$ LANGUAGE plpgsql;
 
 CREATE TRIGGER trg_users_set_updated_at
 BEFORE UPDATE ON users

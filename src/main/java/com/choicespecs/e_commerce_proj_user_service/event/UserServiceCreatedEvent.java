@@ -6,6 +6,7 @@
 package com.choicespecs.e_commerce_proj_user_service.event;
 
 import java.time.Instant;
+import java.util.UUID;
 
 import com.choicespecs.e_commerce_proj_user_service.entity.UserEntity;
 
@@ -14,7 +15,7 @@ import com.choicespecs.e_commerce_proj_user_service.entity.UserEntity;
  * @author christopherlee
  */
 public class UserServiceCreatedEvent {
-    private Long userId;
+    private UUID userId;
     private String email;
     private Instant createdAt;
 
@@ -26,11 +27,11 @@ public class UserServiceCreatedEvent {
         this.createdAt = user.getCreatedAt();
     }
 
-    public Long getUserId() {
+    public UUID getUserId() {
         return userId;
-    }
+    }  
 
-    public void setUserId(Long userId) {
+    public void setUserId(UUID userId) {
         this.userId = userId;
     }
 
