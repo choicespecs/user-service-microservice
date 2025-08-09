@@ -30,4 +30,9 @@ public class EventPublisher {
         rabbitTemplate.convertAndSend(USER_EXCHANGE, USER_CREATED_ROUTING_KEY,event);
     }
 
+    public void publishUserDeletedEvent(UserEntity user) {
+        UserServiceDeletedEvent event = new UserServiceDeletedEvent(user);
+        rabbitTemplate.convertAndSend(USER_EXCHANGE, USER_CREATED_ROUTING_KEY,event);
+    }
+
 }
