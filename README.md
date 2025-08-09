@@ -1,5 +1,5 @@
-# e-commerce-proj-user-service
-E-commerce sample project user service
+#User Service Microservice
+just a sample for learning
 
 ./build.sh
 
