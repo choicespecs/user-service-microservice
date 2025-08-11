@@ -5,6 +5,8 @@
 
 package com.choicespecs.e_commerce_proj_user_service.service;
 
+import java.time.Instant;
+
 import org.springframework.stereotype.Service;
 
 import com.choicespecs.e_commerce_proj_user_service.entity.UserEntity;
@@ -30,5 +32,13 @@ public class UserService {
         UserEntity userEntity = user.toEntity();
         userRepository.save(userEntity);
         eventPublisher.publishUserCreatedEvent(userEntity);
+    }
+
+    public void deleteUser(String email) {
+        UserEntity userEntity = userRepository.findByEmail(email);
+        userEntity.setDeleted(true);
+        userEntity.setUpdatedAt(Instant.now());
+        userRepository.save(userEntity);    
+        eventPublisher.publishUserDeletedEvent(userEntity);
     }
 }

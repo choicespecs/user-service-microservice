@@ -53,6 +53,9 @@ public class UserServiceListener {
                 case CREATE:
                     createUser(jsonNode);             
                     break;
+                case DELETE:
+                    deleteUser(jsonNode);
+                    break;
             }
         } catch (Exception e) {
             log.error(ERROR_PROCESSING_FAIL, e);
@@ -72,4 +75,16 @@ public class UserServiceListener {
         }
     }
 
+    private String requireText(JsonNode node, String field) {
+        JsonNode v = node.get(field);
+        if (v == null || v.isNull() || !v.isTextual()) {
+            throw new IllegalArgumentException("Missing or invalid '" + field + "'");
+        }
+        return v.asText();
+    }
+
+    private void deleteUser(JsonNode node) {
+        String email = requireText(node, "email");
+        userService.deleteUser(email);
+    }
 }

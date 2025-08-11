@@ -20,14 +20,36 @@ public class EventPublisher {
 
     private static final String USER_EXCHANGE = "user.exchange";
     private static final String USER_CREATED_ROUTING_KEY = "user.created";
+    private static final String USER_DELETED_ROUTING_KEY = "user.deleted";
 
     public EventPublisher(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
     }
 
+    public void publishUserEvent(String action, Object payload) {
+        String routingKey;
+        switch (action.toUpperCase()) {
+            case "CREATE":
+                routingKey = USER_CREATED_ROUTING_KEY;
+                break;
+            case "DELETE":
+                routingKey = USER_DELETED_ROUTING_KEY;
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported action: " + action);
+        }
+
+        rabbitTemplate.convertAndSend(USER_EXCHANGE, routingKey, payload);
+    }
+
     public void publishUserCreatedEvent(UserEntity user) {
         UserServiceCreatedEvent event = new UserServiceCreatedEvent(user);
         rabbitTemplate.convertAndSend(USER_EXCHANGE, USER_CREATED_ROUTING_KEY,event);
+    }
+
+    public void publishUserDeletedEvent(UserEntity user) {
+        UserServiceDeletedEvent event = new UserServiceDeletedEvent(user);
+        rabbitTemplate.convertAndSend(USER_EXCHANGE, USER_DELETED_ROUTING_KEY,event);
     }
 
 }
