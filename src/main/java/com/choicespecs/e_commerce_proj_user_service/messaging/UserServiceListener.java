@@ -85,5 +85,6 @@ public class UserServiceListener {
 
     private void deleteUser(JsonNode node) {
         String email = requireText(node, "email");
+        userService.deleteUser(email);
     }
 }

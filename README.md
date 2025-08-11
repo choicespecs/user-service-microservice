@@ -14,3 +14,13 @@ curl -u guest:guest -X POST \
     "payload_encoding": "string",
     "properties": { "content_type": "application/json" }
   }'
+
+
+curl -u guest:guest -X POST http://localhost:15672/api/exchanges/%2F/user.exchange/publish \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "routing_key": "user.delete",
+    "payload": "{\"action\":\"DELETE\",\"email\":\"john@example.com\"}",
+    "payload_encoding": "string",
+    "properties": { "content_type": "application/json" }
+  }'
