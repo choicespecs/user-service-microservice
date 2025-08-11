@@ -3,6 +3,7 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 CREATE TABLE users (
     id uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+    username TEXT NOT NULL,                         -- new
     email TEXT NOT NULL UNIQUE,
     first_name TEXT,
     last_name TEXT,
@@ -11,6 +12,10 @@ CREATE TABLE users (
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+-- Case-insensitive uniqueness for username (John == john)
+CREATE UNIQUE INDEX ux_users_username_ci
+  ON users (lower(username));
 
 CREATE INDEX idx_users_deleted ON users(deleted);
 

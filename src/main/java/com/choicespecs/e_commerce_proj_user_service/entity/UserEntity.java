@@ -23,6 +23,7 @@ public class UserEntity {
     @Id
     private UUID id;
 
+    private String username;
     private String email;
     private String firstName;
     private String lastName;
@@ -46,6 +47,7 @@ public class UserEntity {
     }
 
     public UserEntity(User user) {
+        this.username = user.getUsername();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.phone = user.getPhone();
@@ -102,6 +104,13 @@ public class UserEntity {
     }
     public void setUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Override
