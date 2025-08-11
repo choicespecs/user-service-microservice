@@ -13,6 +13,8 @@ import com.choicespecs.e_commerce_proj_user_service.entity.UserEntity;
 import com.choicespecs.e_commerce_proj_user_service.event.EventPublisher;
 import com.choicespecs.e_commerce_proj_user_service.model.User;
 import com.choicespecs.e_commerce_proj_user_service.repository.UserRepository;
+import com.fasterxml.jackson.databind.JsonNode;
+
 
 /**
  *
@@ -40,5 +42,9 @@ public class UserService {
         userEntity.setUpdatedAt(Instant.now());
         userRepository.save(userEntity);    
         eventPublisher.publishUserDeletedEvent(userEntity);
+    }
+
+    public void updateUser(String username, JsonNode jsonNode) {
+        UserEntity userEntity = userRepository.findByUsername(username);
     }
 }
