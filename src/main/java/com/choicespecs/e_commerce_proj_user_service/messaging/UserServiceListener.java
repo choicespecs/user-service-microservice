@@ -27,6 +27,9 @@ public class UserServiceListener {
     private static final Logger log = LoggerFactory.getLogger(UserServiceListener.class);
     private static final String ACTION_FIELD = "action";
     private static final String USER_FIELD = "user";
+    private static final String EMAIL_FIELD = "email";
+    private static final String USERNAME_FIELD = "username";
+
 
     private static final String ERROR_MISSING_FIELD = "Missing required fields in message";
     private static final String ERROR_PROCESSING_FAIL = "Failed to process message";
@@ -83,14 +86,14 @@ public class UserServiceListener {
     private String requireText(JsonNode node, String field) {
         JsonNode v = node.get(field);
         if (v == null || v.isNull() || !v.isTextual()) {
-            throw new IllegalArgumentException("Missing or invalid '" + field + "'");
+            throw new IllegalArgumentException(ERROR_MISSING_FIELD);
         }
         return v.asText();
     }
 
     private void deleteUser(JsonNode node) {
         try {
-            String email = requireText(node, "email");
+            String email = requireText(node, EMAIL_FIELD);
             userService.deleteUser(email);
         } catch (Exception e) {
             log.error(ERROR_DELETE_USER_FAIL, e);
@@ -99,7 +102,7 @@ public class UserServiceListener {
 
     private void updateUser(JsonNode jsonNode) {
         try {
-            String username = requireText(jsonNode, "username");
+            String username = requireText(jsonNode, USERNAME_FIELD);
             if (!jsonNode.has(USER_FIELD)) {
                 throw new IllegalArgumentException(ERROR_MISSING_FIELD);
             }

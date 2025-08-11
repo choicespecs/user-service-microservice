@@ -56,5 +56,6 @@ public class UserService {
         request.applyTo(userEntity);
         userEntity.setUpdatedAt(Instant.now());
         userRepository.save(userEntity);
+        eventPublisher.publishUserUpdatedEvent(userEntity);
     }
 }
