@@ -11,6 +11,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.choicespecs.e_commerce_proj_user_service.constants.UserFieldConstants;
 import com.choicespecs.e_commerce_proj_user_service.model.ActionType;
 import com.choicespecs.e_commerce_proj_user_service.model.User;
 import com.choicespecs.e_commerce_proj_user_service.service.UserService;
@@ -26,11 +27,12 @@ public class UserServiceListener {
 
     private static final Logger log = LoggerFactory.getLogger(UserServiceListener.class);
     private static final String ACTION_FIELD = "action";
-    private static final String USER_FIELD = "user";
 
     private static final String ERROR_MISSING_FIELD = "Missing required fields in message";
     private static final String ERROR_PROCESSING_FAIL = "Failed to process message";
     private static final String ERROR_CREATE_USER_FAIL = "Failed to create user";
+    private static final String ERROR_DELETE_USER_FAIL = "Failed to delete user";
+    private static final String ERROR_UPDATE_USER_FAIL = "Failed to update user";
 
     private static final String USER_QUEUE = "user-service-queue";
 
@@ -56,6 +58,9 @@ public class UserServiceListener {
                 case DELETE:
                     deleteUser(jsonNode);
                     break;
+                case UPDATE:
+                    updateUser(jsonNode);
+                    break;
             }
         } catch (Exception e) {
             log.error(ERROR_PROCESSING_FAIL, e);
@@ -64,10 +69,10 @@ public class UserServiceListener {
 
     private void createUser(JsonNode jsonNode) {
         try {
-            if (!jsonNode.has(USER_FIELD)) {
+            if (!jsonNode.has(UserFieldConstants.USER_FIELD)) {
                 throw new IllegalArgumentException(ERROR_MISSING_FIELD);
             }
-            JsonNode userJson = jsonNode.get(USER_FIELD);
+            JsonNode userJson = jsonNode.get(UserFieldConstants.USER_FIELD);
             User user = objectMapper.treeToValue(userJson, User.class);
             userService.createUser(user);
         } catch (Exception e) {
@@ -78,13 +83,30 @@ public class UserServiceListener {
     private String requireText(JsonNode node, String field) {
         JsonNode v = node.get(field);
         if (v == null || v.isNull() || !v.isTextual()) {
-            throw new IllegalArgumentException("Missing or invalid '" + field + "'");
+            throw new IllegalArgumentException(ERROR_MISSING_FIELD);
         }
         return v.asText();
     }
 
     private void deleteUser(JsonNode node) {
-        String email = requireText(node, "email");
-        userService.deleteUser(email);
+        try {
+            String email = requireText(node, UserFieldConstants.EMAIL_FIELD);
+            userService.deleteUser(email);
+        } catch (Exception e) {
+            log.error(ERROR_DELETE_USER_FAIL, e);
+        }
+    }
+
+    private void updateUser(JsonNode jsonNode) {
+        try {
+            if (!jsonNode.has(UserFieldConstants.USER_FIELD)) {
+                throw new IllegalArgumentException(ERROR_MISSING_FIELD);
+            }
+            JsonNode userJson = jsonNode.get(UserFieldConstants.USER_FIELD);
+            String username = requireText(userJson, UserFieldConstants.USERNAME_FIELD);
+            userService.updateUser(username, userJson);
+        } catch (Exception e) {
+            log.error(ERROR_UPDATE_USER_FAIL, e);
+        }
     }
 }
