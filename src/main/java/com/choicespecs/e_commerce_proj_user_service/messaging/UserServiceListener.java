@@ -31,6 +31,8 @@ public class UserServiceListener {
     private static final String ERROR_MISSING_FIELD = "Missing required fields in message";
     private static final String ERROR_PROCESSING_FAIL = "Failed to process message";
     private static final String ERROR_CREATE_USER_FAIL = "Failed to create user";
+    private static final String ERROR_DELETE_USER_FAIL = "Failed to delete user";
+    private static final String ERROR_UPDATE_USER_FAIL = "Failed to update user";
 
     private static final String USER_QUEUE = "user-service-queue";
 
@@ -55,6 +57,9 @@ public class UserServiceListener {
                     break;
                 case DELETE:
                     deleteUser(jsonNode);
+                    break;
+                case UPDATE:
+                    updateUser(jsonNode);
                     break;
             }
         } catch (Exception e) {
@@ -84,7 +89,24 @@ public class UserServiceListener {
     }
 
     private void deleteUser(JsonNode node) {
-        String email = requireText(node, "email");
-        userService.deleteUser(email);
+        try {
+            String email = requireText(node, "email");
+            userService.deleteUser(email);
+        } catch (Exception e) {
+            log.error(ERROR_DELETE_USER_FAIL, e);
+        }
+    }
+
+    private void updateUser(JsonNode jsonNode) {
+        try {
+            String username = requireText(jsonNode, "username");
+            if (!jsonNode.has(USER_FIELD)) {
+                throw new IllegalArgumentException(ERROR_MISSING_FIELD);
+            }
+            JsonNode userJson = jsonNode.get(USER_FIELD);
+            userService.updateUser(username, userJson);
+        } catch (Exception e) {
+            log.error(ERROR_UPDATE_USER_FAIL, e);
+        }
     }
 }

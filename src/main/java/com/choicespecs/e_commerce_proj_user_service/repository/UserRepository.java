@@ -20,4 +20,5 @@ public interface UserRepository extends CrudRepository<UserEntity, String> {
     List<UserEntity> findByDeletedFalse();
 
     UserEntity findByEmail(String email);
+    UserEntity findByUsernameIgnoreCase(String username);
 }
