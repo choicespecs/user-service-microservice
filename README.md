@@ -24,3 +24,14 @@ curl -u guest:guest -X POST http://localhost:15672/api/exchanges/%2F/user.exchan
     "payload_encoding": "string",
     "properties": { "content_type": "application/json" }
   }'
+
+
+  curl -u guest:guest -X POST \
+  http://localhost:15672/api/exchanges/%2F/user.exchange/publish \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "routing_key": "user.updated",
+    "payload": "{\"action\":\"UPDATE\",\"user\":{\"username\":\"john\",\"email\":\"jack@example.com\"}}",
+    "payload_encoding": "string",
+    "properties": { "content_type": "application/json" }
+  }'
