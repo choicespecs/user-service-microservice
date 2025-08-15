@@ -33,6 +33,7 @@ public class UserServiceListener {
     private static final String ERROR_CREATE_USER_FAIL = "Failed to create user";
     private static final String ERROR_DELETE_USER_FAIL = "Failed to delete user";
     private static final String ERROR_UPDATE_USER_FAIL = "Failed to update user";
+    private static final String ERROR_GET_USER_FAIL = "Failed to get user";
 
     private static final String USER_QUEUE = "user-service-queue";
 
@@ -60,6 +61,9 @@ public class UserServiceListener {
                     break;
                 case UPDATE:
                     updateUser(jsonNode);
+                    break;
+                case GET:
+                    getUser(jsonNode);
                     break;
             }
         } catch (Exception e) {
@@ -109,4 +113,17 @@ public class UserServiceListener {
             log.error(ERROR_UPDATE_USER_FAIL, e);
         }
     }
+
+    private void getUser(JsonNode jsonNode) {
+        try {
+            if (!jsonNode.has(UserFieldConstants.USER_FIELD)) {
+                throw new IllegalArgumentException(ERROR_MISSING_FIELD);
+            }
+            JsonNode userJson = jsonNode.get(UserFieldConstants.USER_FIELD);
+            userService.getUser(userJson);
+        } catch (Exception e) {
+            log.error(ERROR_GET_USER_FAIL, e);
+        }
+    }
+
 }

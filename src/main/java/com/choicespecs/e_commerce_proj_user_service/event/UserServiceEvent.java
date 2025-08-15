@@ -1,0 +1,62 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+
+package com.choicespecs.e_commerce_proj_user_service.event;
+
+import java.time.Instant;
+import java.util.UUID;
+
+import com.choicespecs.e_commerce_proj_user_service.entity.UserEntity;
+
+/**
+ *
+ * @author christopherlee
+ */
+public abstract class UserServiceEvent {
+    private UUID userId;
+    private String email;
+    private Instant createdAt;
+    private Instant updatedAt;
+
+    public UserServiceEvent(UserEntity user) {
+        this.userId = user.getId();
+        this.email = user.getEmail();
+        this.createdAt =user.getCreatedAt();
+        this.updatedAt = user.getUpdatedAt();
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }  
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+    
+}

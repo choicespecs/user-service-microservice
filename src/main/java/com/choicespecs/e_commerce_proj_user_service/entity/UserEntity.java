@@ -113,6 +113,10 @@ public class UserEntity {
         this.username = username;
     }
 
+    public User toUser() {
+        return new User(username, email, firstName, lastName, phone);
+    }
+
     @Override
     public String toString() {
         return "UserEntity{" +

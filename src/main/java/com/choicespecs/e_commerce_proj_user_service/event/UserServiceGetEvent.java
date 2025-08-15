@@ -4,15 +4,15 @@
  */
 
 package com.choicespecs.e_commerce_proj_user_service.event;
-
 import com.choicespecs.e_commerce_proj_user_service.entity.UserEntity;
 
 /**
  *
  * @author christopherlee
  */
-public class UserServiceDeletedEvent extends UserServiceEvent {
-    public UserServiceDeletedEvent(UserEntity user) {
+public class UserServiceGetEvent extends UserServiceEvent {
+
+    public UserServiceGetEvent(UserEntity user) {
         super(user);
     }
 }
