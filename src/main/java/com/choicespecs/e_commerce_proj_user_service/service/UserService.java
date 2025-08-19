@@ -63,8 +63,13 @@ public class UserService {
         eventPublisher.publishUserUpdatedEvent(userEntity);
     }
 
-    public Optional<UserEntity> getUser(JsonNode jsonNode) throws JsonProcessingException{
+    public Optional<UserEntity> getUser(JsonNode jsonNode, String headerReqId) throws JsonProcessingException{
         UserRequest request = objectMapper.treeToValue(jsonNode, UserRequest.class);
-        return userJdbcRepository.getUser(request);
+        Optional<UserEntity> opt = userJdbcRepository.getUser(request);
+        if (opt.isPresent()) {
+            eventPublisher.publishUserGetResult(headerReqId, opt.get());
+        } else {
+            eventPublisher.publishUserGetNotFound(headerReqId);
+        }
     }
 }

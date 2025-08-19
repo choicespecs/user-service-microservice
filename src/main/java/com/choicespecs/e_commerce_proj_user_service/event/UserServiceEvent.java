@@ -15,16 +15,26 @@ import com.choicespecs.e_commerce_proj_user_service.entity.UserEntity;
  * @author christopherlee
  */
 public abstract class UserServiceEvent {
+    private UUID eventId;
     private UUID userId;
     private String email;
     private Instant createdAt;
     private Instant updatedAt;
 
     public UserServiceEvent(UserEntity user) {
+        this.eventId = UUID.randomUUID();
         this.userId = user.getId();
         this.email = user.getEmail();
         this.createdAt =user.getCreatedAt();
         this.updatedAt = user.getUpdatedAt();
+    }
+
+    public UUID getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(UUID eventId) {
+        this.eventId = eventId;
     }
 
     public UUID getUserId() {

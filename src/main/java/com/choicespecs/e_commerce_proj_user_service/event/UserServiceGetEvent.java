@@ -5,6 +5,8 @@
 
 package com.choicespecs.e_commerce_proj_user_service.event;
 import com.choicespecs.e_commerce_proj_user_service.entity.UserEntity;
+import com.choicespecs.e_commerce_proj_user_service.model.User;
+
 
 /**
  *
@@ -12,7 +14,10 @@ import com.choicespecs.e_commerce_proj_user_service.entity.UserEntity;
  */
 public class UserServiceGetEvent extends UserServiceEvent {
 
+    private User user;
+
     public UserServiceGetEvent(UserEntity user) {
         super(user);
+        this.user = user.toUser();
     }
 }

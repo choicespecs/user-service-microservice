@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
 import com.choicespecs.e_commerce_proj_user_service.constants.UserFieldConstants;
@@ -45,7 +46,8 @@ public class UserServiceListener {
     private ObjectMapper objectMapper;
 
     @RabbitListener(queues = USER_QUEUE)
-    public void receiveMessage(JsonNode jsonNode) {
+    public void receiveMessage(JsonNode jsonNode,
+                               @Header(name="x-request-id", required=false) String requestId) {
         try {
             if (!jsonNode.has(ACTION_FIELD)) {
                 throw new IllegalArgumentException(ERROR_MISSING_FIELD);
@@ -63,7 +65,7 @@ public class UserServiceListener {
                     updateUser(jsonNode);
                     break;
                 case GET:
-                    getUser(jsonNode);
+                    getUser(jsonNode, requestId);
                     break;
             }
         } catch (Exception e) {
@@ -114,16 +116,20 @@ public class UserServiceListener {
         }
     }
 
-    private void getUser(JsonNode jsonNode) {
+    private void getUser(JsonNode jsonNode, String headerReqId) {
         try {
+            if (headerReqId == null || headerReqId.isBlank()) {
+                throw new IllegalArgumentException("Missing request id header for GET");
+            }
             if (!jsonNode.has(UserFieldConstants.USER_FIELD)) {
                 throw new IllegalArgumentException(ERROR_MISSING_FIELD);
             }
             JsonNode userJson = jsonNode.get(UserFieldConstants.USER_FIELD);
-            userService.getUser(userJson);
+            userService.getUser(userJson, headerReqId);
         } catch (Exception e) {
             log.error(ERROR_GET_USER_FAIL, e);
         }
     }
+
 
 }
