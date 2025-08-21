@@ -32,7 +32,9 @@ public class UserJdbcRepository {
                 phone, 
                 email, 
                 username, 
-                deleted
+                deleted,
+                created_at,
+                updated_at
             FROM users
             WHERE deleted = false
             """;
@@ -51,17 +53,17 @@ public class UserJdbcRepository {
         int selectors = 0;
         if (notBlank(request.getUsername())) {
             sql.append(" AND LOWER(username) = :username");
-            p.put("username", request.getUsername());
+            p.put("username", request.getUsername().toLowerCase());
             selectors++;
         }
         if (notBlank(request.getEmail())) {
             sql.append(" AND LOWER(email) = :email");
-            p.put("email", request.getEmail());
+            p.put("email", request.getEmail().toLowerCase());
             selectors++;
         }
 
         if (notBlank(request.getPhone())) {
-            sql.append(" AND LOWER(phone) = :phone");
+            sql.append(" AND phone = :phone");
             p.put("phone", request.getPhone());
             selectors++;
         }
@@ -83,7 +85,7 @@ public class UserJdbcRepository {
                 e.setUsername(rs.getString("username"));
                 e.setDeleted(rs.getBoolean("deleted"));
                 e.setCreatedAt(rs.getTimestamp("created_at").toInstant());
-                e.setUpdatedAt(rs.getTimestamp("created_at").toInstant());
+                e.setUpdatedAt(rs.getTimestamp("updated_at").toInstant());
                 return e;
             };
         }

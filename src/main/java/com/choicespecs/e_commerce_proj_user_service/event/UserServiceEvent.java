@@ -21,11 +21,14 @@ public abstract class UserServiceEvent {
     private Instant createdAt;
     private Instant updatedAt;
 
+    protected UserServiceEvent() {}
+
+
     public UserServiceEvent(UserEntity user) {
         this.eventId = UUID.randomUUID();
         this.userId = user.getId();
         this.email = user.getEmail();
-        this.createdAt =user.getCreatedAt();
+        this.createdAt = user.getCreatedAt();
         this.updatedAt = user.getUpdatedAt();
     }
 

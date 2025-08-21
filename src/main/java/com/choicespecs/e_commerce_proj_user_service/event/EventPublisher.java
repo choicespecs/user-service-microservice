@@ -68,8 +68,28 @@ public class EventPublisher {
     }
 
     public void publishUserReadEvent(String requestId, UserEntity user) {
-        UserServiceEvent event = new UserServiceGetEvent(user);
-        rabbitTemplate.convertAndSend(USER_EXCHANGE, USER_READ_ROUTING_KEY,event);
+        UserServiceGetEvent event = UserServiceGetEvent.found(requestId, user);
+        rabbitTemplate.convertAndSend(USER_EXCHANGE, USER_READ_ROUTING_KEY, event, msg -> {
+                msg.getMessageProperties().setHeader("x-request-id", requestId);
+                msg.getMessageProperties().setContentType("application/json");
+                return msg;
+        });
+    }
+
+    public void publishUserGetNotFound(String requestId) {
+        UserServiceGetEvent event = UserServiceGetEvent.notFound(requestId);
+        rabbitTemplate.convertAndSend(USER_EXCHANGE, USER_READ_ROUTING_KEY, event, msg -> {
+                msg.getMessageProperties().setHeader("x-request-id", requestId);
+                return msg;
+        });
+    }
+
+    public void publishUserGetError(String requestId, String message) {
+        UserServiceGetEvent event = UserServiceGetEvent.error(requestId, message);
+        rabbitTemplate.convertAndSend(USER_EXCHANGE, USER_READ_ROUTING_KEY, event, msg -> {
+                msg.getMessageProperties().setHeader("x-request-id", requestId);
+                return msg;
+        });
     }
 
 }

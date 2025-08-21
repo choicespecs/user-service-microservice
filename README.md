@@ -35,3 +35,29 @@ curl -u guest:guest -X POST http://localhost:15672/api/exchanges/%2F/user.exchan
     "payload_encoding": "string",
     "properties": { "content_type": "application/json" }
   }'
+
+curl -u guest:guest -X POST \
+  http://localhost:15672/api/exchanges/%2F/user.exchange/publish \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "routing_key": "user.get",
+    "payload": "{\"action\":\"GET\",\"user\":{\"email\":\"john@example.com\"}}",
+    "payload_encoding": "string",
+    "properties": {
+      "content_type": "application/json",
+      "headers": {
+        "x-request-id": "req-12345"
+      }
+    }
+  }'
+
+
+
+ we can debug events using this 
+
+# create
+curl -u guest:guest -X PUT http://localhost:15672/api/queues/%2F/debug.all -H 'Content-Type: application/json' -d '{"durable":false,"auto_delete":true}'
+# bind to everything on your exchange
+curl -u guest:guest -X POST http://localhost:15672/api/bindings/%2F/e/user.exchange/q/debug.all -H 'Content-Type: application/json' -d '{"routing_key":"#"}'
+# fetch
+curl -u guest:guest -X POST http://localhost:15672/api/queues/%2F/debug.all/get -H 'Content-Type: application/json' -d '{"count":50,"ackmode":"ack_requeue_false","encoding":"auto"}'
