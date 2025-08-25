@@ -25,4 +25,6 @@ public class ErrorMessageConstants {
 
     public static final String ERROR_ACTION_TYPE_NULL = "ActionType cannot be null or blank";
     public static final String ERROR_INVALID_ACTION_TYPE = "Invalid ActionType: ";
+
+    public static final String ERROR_MORE_THAN_ONE_SELECTOR = "Provide exactly one selector";
 }
