@@ -55,18 +55,18 @@ public class UserJdbcRepository {
         int selectors = 0;
         if (notBlank(request.getUsername())) {
             sql.append(" AND LOWER(username) = :username");
-            p.put(FieldConstants.USER_USERNAME_FIELD, request.getUsername().toLowerCase());
+            p.put(FieldConstants.USERNAME_FIELD, request.getUsername().toLowerCase());
             selectors++;
         }
         if (notBlank(request.getEmail())) {
             sql.append(" AND LOWER(email) = :email");
-            p.put(FieldConstants.USER_EMAIL_FIELD, request.getEmail().toLowerCase());
+            p.put(FieldConstants.EMAIL_FIELD, request.getEmail().toLowerCase());
             selectors++;
         }
 
         if (notBlank(request.getPhone())) {
             sql.append(" AND phone = :phone");
-            p.put(FieldConstants.USER_PHONE_FIELD, request.getPhone());
+            p.put(FieldConstants.PHONE_FIELD, request.getPhone());
             selectors++;
         }
 
@@ -79,15 +79,15 @@ public class UserJdbcRepository {
         private RowMapper<UserEntity> rowMapper() {
             return (rs, i) -> {
                 UserEntity e = new UserEntity();
-                e.setId(rs.getObject("id", java.util.UUID.class));
-                e.setFirstName(rs.getString("first_name"));
-                e.setLastName(rs.getString("last_name"));
-                e.setPhone(rs.getString("phone"));
-                e.setEmail(rs.getString("email"));
-                e.setUsername(rs.getString("username"));
-                e.setDeleted(rs.getBoolean("deleted"));
-                e.setCreatedAt(rs.getTimestamp("created_at").toInstant());
-                e.setUpdatedAt(rs.getTimestamp("updated_at").toInstant());
+                e.setId(rs.getObject(FieldConstants.ID_FIELD, java.util.UUID.class));
+                e.setFirstName(rs.getString(FieldConstants.FIRST_NAME_FIELD));
+                e.setLastName(rs.getString(FieldConstants.LAST_NAME_FIELD));
+                e.setPhone(rs.getString(FieldConstants.PHONE_FIELD));
+                e.setEmail(rs.getString(FieldConstants.EMAIL_FIELD));
+                e.setUsername(rs.getString(FieldConstants.USERNAME_FIELD));
+                e.setDeleted(rs.getBoolean(FieldConstants.DELETED_FIELD));
+                e.setCreatedAt(rs.getTimestamp(FieldConstants.CREATED_AT_FIELD).toInstant());
+                e.setUpdatedAt(rs.getTimestamp(FieldConstants.UPDATED_AT_FIELD).toInstant());
                 return e;
             };
         }

@@ -88,7 +88,7 @@ public class UserServiceListener {
 
     private void deleteUser(JsonNode node) {
         try {
-            String email = requireText(node, FieldConstants.USER_EMAIL_FIELD);
+            String email = requireText(node, FieldConstants.EMAIL_FIELD);
             userService.deleteUser(email);
         } catch (Exception e) {
             log.error(ErrorMessageConstants.ERROR_DELETE_USER_FAIL, e);
@@ -101,7 +101,7 @@ public class UserServiceListener {
                 throw new IllegalArgumentException(ErrorMessageConstants.ERROR_MISSING_FIELD);
             }
             JsonNode userJson = jsonNode.get(FieldConstants.USER_FIELD);
-            String username = requireText(userJson, FieldConstants.USER_USERNAME_FIELD);
+            String username = requireText(userJson, FieldConstants.USERNAME_FIELD);
             userService.updateUser(username, userJson);
         } catch (Exception e) {
             log.error(ErrorMessageConstants.ERROR_UPDATE_USER_FAIL, e);
