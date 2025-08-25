@@ -5,6 +5,7 @@
 
 package com.choicespecs.e_commerce_proj_user_service.event;
 import java.time.Instant;
+import java.util.UUID;
 
 import com.choicespecs.e_commerce_proj_user_service.entity.UserEntity;
 import com.choicespecs.e_commerce_proj_user_service.model.User;
@@ -46,6 +47,7 @@ public class UserServiceGetEvent extends UserServiceEvent {
 
     public static UserServiceGetEvent notFound(String requestId) {
         UserServiceGetEvent event = new UserServiceGetEvent();
+        event.setEventId(UUID.randomUUID());
         event.setRequestId(requestId);
         event.setStatus(Status.NOT_FOUND);
         event.setCreatedAt(Instant.now());
@@ -55,6 +57,7 @@ public class UserServiceGetEvent extends UserServiceEvent {
 
     public static UserServiceGetEvent error(String requestId, String error) {
         UserServiceGetEvent event = new UserServiceGetEvent();
+        event.setEventId(UUID.randomUUID());
         event.setRequestId(requestId);
         event.setStatus(Status.ERROR);
         event.setCreatedAt(Instant.now());
