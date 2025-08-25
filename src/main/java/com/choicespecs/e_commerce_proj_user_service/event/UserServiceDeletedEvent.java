@@ -5,50 +5,14 @@
 
 package com.choicespecs.e_commerce_proj_user_service.event;
 
-import java.time.Instant;
-import java.util.UUID;
-
 import com.choicespecs.e_commerce_proj_user_service.entity.UserEntity;
 
 /**
  *
  * @author christopherlee
  */
-public class UserServiceDeletedEvent {
-    private UUID userId;
-    private String email;
-    private Instant deletedAt;
-
-    public UserServiceDeletedEvent() {}
-
+public class UserServiceDeletedEvent extends UserServiceEvent {
     public UserServiceDeletedEvent(UserEntity user) {
-        this.userId = user.getId();
-        this.email = user.getEmail();
-        this.deletedAt = user.getUpdatedAt();
+        super(user);
     }
-
-    public UUID getUserId() {
-        return userId;
-    }  
-
-    public void setUserId(UUID userId) {
-        this.userId = userId;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Instant getDeletedAt() {
-        return deletedAt;
-    }
-
-    public void setDeletedAt(Instant createdAt) {
-        this.deletedAt = createdAt;
-    }
-
 }

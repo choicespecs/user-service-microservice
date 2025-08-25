@@ -23,6 +23,7 @@ public class EventPublisher {
     private static final String USER_CREATED_ROUTING_KEY = "user.created";
     private static final String USER_DELETED_ROUTING_KEY = "user.deleted";
     private static final String USER_UPDATED_ROUTING_KEY = "user.updated";
+    private static final String USER_READ_ROUTING_KEY = "user.get";
 
     public EventPublisher(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
@@ -41,6 +42,9 @@ public class EventPublisher {
             case UPDATE:
                 routingKey = USER_UPDATED_ROUTING_KEY;
                 break;
+            case GET:
+                routingKey = USER_READ_ROUTING_KEY;
+                break;
             default:
                 throw new IllegalArgumentException("Unsupported action: " + action);
         }
@@ -49,18 +53,43 @@ public class EventPublisher {
     }
 
     public void publishUserCreatedEvent(UserEntity user) {
-        UserServiceCreatedEvent event = new UserServiceCreatedEvent(user);
+        UserServiceEvent event = new UserServiceCreatedEvent(user);
         rabbitTemplate.convertAndSend(USER_EXCHANGE, USER_CREATED_ROUTING_KEY,event);
     }
 
     public void publishUserDeletedEvent(UserEntity user) {
-        UserServiceDeletedEvent event = new UserServiceDeletedEvent(user);
+        UserServiceEvent event = new UserServiceDeletedEvent(user);
         rabbitTemplate.convertAndSend(USER_EXCHANGE, USER_DELETED_ROUTING_KEY,event);
     }
 
     public void publishUserUpdatedEvent(UserEntity user) {
-        UserServiceUpdatedEvent event = new UserServiceUpdatedEvent(user);
+        UserServiceEvent event = new UserServiceUpdatedEvent(user);
         rabbitTemplate.convertAndSend(USER_EXCHANGE, USER_UPDATED_ROUTING_KEY,event);
+    }
+
+    public void publishUserReadEvent(String requestId, UserEntity user) {
+        UserServiceGetEvent event = UserServiceGetEvent.found(requestId, user);
+        rabbitTemplate.convertAndSend(USER_EXCHANGE, USER_READ_ROUTING_KEY, event, msg -> {
+                msg.getMessageProperties().setHeader("x-request-id", requestId);
+                msg.getMessageProperties().setContentType("application/json");
+                return msg;
+        });
+    }
+
+    public void publishUserGetNotFound(String requestId) {
+        UserServiceGetEvent event = UserServiceGetEvent.notFound(requestId);
+        rabbitTemplate.convertAndSend(USER_EXCHANGE, USER_READ_ROUTING_KEY, event, msg -> {
+                msg.getMessageProperties().setHeader("x-request-id", requestId);
+                return msg;
+        });
+    }
+
+    public void publishUserGetError(String requestId, String message) {
+        UserServiceGetEvent event = UserServiceGetEvent.error(requestId, message);
+        rabbitTemplate.convertAndSend(USER_EXCHANGE, USER_READ_ROUTING_KEY, event, msg -> {
+                msg.getMessageProperties().setHeader("x-request-id", requestId);
+                return msg;
+        });
     }
 
 }

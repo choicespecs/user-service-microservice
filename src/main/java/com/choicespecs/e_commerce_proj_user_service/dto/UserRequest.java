@@ -11,16 +11,16 @@ import com.choicespecs.e_commerce_proj_user_service.entity.UserEntity;
  *
  * @author christopherlee
  */
-public class UserUpdateRequest {
+public class UserRequest {
     private String firstName;
     private String lastName;
     private String phone;
     private String email;
     private String username;
 
-    public UserUpdateRequest() {}
+    public UserRequest() {}
 
-    public UserUpdateRequest(String firstName, String lastName, String phone, String email, String username) {
+    public UserRequest(String firstName, String lastName, String phone, String email, String username) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;

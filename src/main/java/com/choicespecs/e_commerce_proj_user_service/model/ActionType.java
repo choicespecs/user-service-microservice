@@ -10,7 +10,7 @@ package com.choicespecs.e_commerce_proj_user_service.model;
  * @author christopherlee
  */
 public enum ActionType {
-    CREATE, UPDATE, DELETE, GET;
+    CREATE, UPDATE, DELETE, GET, SEARCH;
 
     public static ActionType fromString(String value) {
         if (value == null || value.isBlank()) {

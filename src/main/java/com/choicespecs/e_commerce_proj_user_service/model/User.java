@@ -20,6 +20,14 @@ public class User {
 
     public User() {}
 
+    public User(String username, String email, String phone, String firstName, String lastName) {
+        this.username = username;
+        this.email = email;
+        this.phone = phone;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
     public String getUsername() {
         return username;
     }
