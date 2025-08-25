@@ -5,6 +5,8 @@
 
 package com.choicespecs.e_commerce_proj_user_service.model;
 
+import com.choicespecs.e_commerce_proj_user_service.constants.ErrorMessageConstants;
+
 /**
  *
  * @author christopherlee
@@ -14,7 +16,7 @@ public enum ActionType {
 
     public static ActionType fromString(String value) {
         if (value == null || value.isBlank()) {
-            throw new IllegalArgumentException("ActionType cannot be null or blank");
+            throw new IllegalArgumentException(ErrorMessageConstants.ERROR_ACTION_TYPE_NULL);
         }
 
         for (ActionType action : ActionType.values()) {
@@ -23,6 +25,6 @@ public enum ActionType {
             }
         }
 
-        throw new IllegalArgumentException("Invalid ActionType: " + value);
+        throw new IllegalArgumentException(ErrorMessageConstants.ERROR_INVALID_ACTION_TYPE + value);
     }
 }
