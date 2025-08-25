@@ -20,4 +20,9 @@ public class ErrorMessageConstants {
     public static final String ERROR_DELETE_USER_FAIL = "Failed to delete user";
     public static final String ERROR_UPDATE_USER_FAIL = "Failed to update user";
     public static final String ERROR_GET_USER_FAIL = "Failed to get user";
+    public static final String ERROR_UNSUPPORTED_ACTION = "Unsupported action: ";
+
+
+    public static final String ERROR_ACTION_TYPE_NULL = "ActionType cannot be null or blank";
+    public static final String ERROR_INVALID_ACTION_TYPE = "Invalid ActionType: ";
 }

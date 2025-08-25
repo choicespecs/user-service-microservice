@@ -8,6 +8,8 @@ package com.choicespecs.e_commerce_proj_user_service.event;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
+import com.choicespecs.e_commerce_proj_user_service.constants.ErrorMessageConstants;
+import com.choicespecs.e_commerce_proj_user_service.constants.FieldConstants;
 import com.choicespecs.e_commerce_proj_user_service.entity.UserEntity;
 import com.choicespecs.e_commerce_proj_user_service.model.ActionType;
 
@@ -46,7 +48,7 @@ public class EventPublisher {
                 routingKey = USER_READ_ROUTING_KEY;
                 break;
             default:
-                throw new IllegalArgumentException("Unsupported action: " + action);
+                throw new IllegalArgumentException(ErrorMessageConstants.ERROR_UNSUPPORTED_ACTION + action);
         }
 
         rabbitTemplate.convertAndSend(USER_EXCHANGE, routingKey, payload);
@@ -70,8 +72,8 @@ public class EventPublisher {
     public void publishUserReadEvent(String requestId, UserEntity user) {
         UserServiceGetEvent event = UserServiceGetEvent.found(requestId, user);
         rabbitTemplate.convertAndSend(USER_EXCHANGE, USER_READ_ROUTING_KEY, event, msg -> {
-                msg.getMessageProperties().setHeader("x-request-id", requestId);
-                msg.getMessageProperties().setContentType("application/json");
+                msg.getMessageProperties().setHeader(FieldConstants.HEADER_REQUEST_ID_FIELD, requestId);
+                msg.getMessageProperties().setContentType(FieldConstants.JSON_CONTENT_TYPE);
                 return msg;
         });
     }
@@ -79,7 +81,7 @@ public class EventPublisher {
     public void publishUserGetNotFound(String requestId) {
         UserServiceGetEvent event = UserServiceGetEvent.notFound(requestId);
         rabbitTemplate.convertAndSend(USER_EXCHANGE, USER_READ_ROUTING_KEY, event, msg -> {
-                msg.getMessageProperties().setHeader("x-request-id", requestId);
+                msg.getMessageProperties().setHeader(FieldConstants.HEADER_REQUEST_ID_FIELD, requestId);
                 return msg;
         });
     }
@@ -87,7 +89,7 @@ public class EventPublisher {
     public void publishUserGetError(String requestId, String message) {
         UserServiceGetEvent event = UserServiceGetEvent.error(requestId, message);
         rabbitTemplate.convertAndSend(USER_EXCHANGE, USER_READ_ROUTING_KEY, event, msg -> {
-                msg.getMessageProperties().setHeader("x-request-id", requestId);
+                msg.getMessageProperties().setHeader(FieldConstants.HEADER_REQUEST_ID_FIELD, requestId);
                 return msg;
         });
     }

@@ -13,7 +13,7 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
 import com.choicespecs.e_commerce_proj_user_service.constants.ErrorMessageConstants;
-import com.choicespecs.e_commerce_proj_user_service.constants.UserFieldConstants;
+import com.choicespecs.e_commerce_proj_user_service.constants.FieldConstants;
 import com.choicespecs.e_commerce_proj_user_service.model.ActionType;
 import com.choicespecs.e_commerce_proj_user_service.model.User;
 import com.choicespecs.e_commerce_proj_user_service.service.UserService;
@@ -28,7 +28,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class UserServiceListener {
 
     private static final Logger log = LoggerFactory.getLogger(UserServiceListener.class);
-    private static final String ACTION_FIELD = "action";
     private static final String USER_QUEUE = "user-service-queue";
 
 
@@ -40,12 +39,12 @@ public class UserServiceListener {
 
     @RabbitListener(queues = USER_QUEUE)
     public void receiveMessage(JsonNode jsonNode,
-                               @Header(name="x-request-id", required=false) String requestId) {
+                               @Header(name=FieldConstants.HEADER_REQUEST_ID_FIELD, required=false) String requestId) {
         try {
-            if (!jsonNode.has(ACTION_FIELD)) {
+            if (!jsonNode.has(FieldConstants.ACTION_FIELD)) {
                 throw new IllegalArgumentException(ErrorMessageConstants.ERROR_MISSING_FIELD);
             }
-            String actionString = jsonNode.get(ACTION_FIELD).asText().toLowerCase();
+            String actionString = jsonNode.get(FieldConstants.ACTION_FIELD).asText().toLowerCase();
             ActionType action = ActionType.fromString(actionString);
             switch (action) {
                 case CREATE:
@@ -68,10 +67,10 @@ public class UserServiceListener {
 
     private void createUser(JsonNode jsonNode) {
         try {
-            if (!jsonNode.has(UserFieldConstants.USER_FIELD)) {
+            if (!jsonNode.has(FieldConstants.USER_FIELD)) {
                 throw new IllegalArgumentException(ErrorMessageConstants.ERROR_MISSING_FIELD);
             }
-            JsonNode userJson = jsonNode.get(UserFieldConstants.USER_FIELD);
+            JsonNode userJson = jsonNode.get(FieldConstants.USER_FIELD);
             User user = objectMapper.treeToValue(userJson, User.class);
             userService.createUser(user);
         } catch (Exception e) {
@@ -89,7 +88,7 @@ public class UserServiceListener {
 
     private void deleteUser(JsonNode node) {
         try {
-            String email = requireText(node, UserFieldConstants.EMAIL_FIELD);
+            String email = requireText(node, FieldConstants.USER_EMAIL_FIELD);
             userService.deleteUser(email);
         } catch (Exception e) {
             log.error(ErrorMessageConstants.ERROR_DELETE_USER_FAIL, e);
@@ -98,11 +97,11 @@ public class UserServiceListener {
 
     private void updateUser(JsonNode jsonNode) {
         try {
-            if (!jsonNode.has(UserFieldConstants.USER_FIELD)) {
+            if (!jsonNode.has(FieldConstants.USER_FIELD)) {
                 throw new IllegalArgumentException(ErrorMessageConstants.ERROR_MISSING_FIELD);
             }
-            JsonNode userJson = jsonNode.get(UserFieldConstants.USER_FIELD);
-            String username = requireText(userJson, UserFieldConstants.USERNAME_FIELD);
+            JsonNode userJson = jsonNode.get(FieldConstants.USER_FIELD);
+            String username = requireText(userJson, FieldConstants.USER_USERNAME_FIELD);
             userService.updateUser(username, userJson);
         } catch (Exception e) {
             log.error(ErrorMessageConstants.ERROR_UPDATE_USER_FAIL, e);
@@ -114,10 +113,10 @@ public class UserServiceListener {
             if (headerReqId == null || headerReqId.isBlank()) {
                 throw new IllegalArgumentException(ErrorMessageConstants.ERROR_MISSING_HEADER);
             }
-            if (!jsonNode.has(UserFieldConstants.USER_FIELD)) {
+            if (!jsonNode.has(FieldConstants.USER_FIELD)) {
                 throw new IllegalArgumentException(ErrorMessageConstants.ERROR_MISSING_FIELD);
             }
-            JsonNode userJson = jsonNode.get(UserFieldConstants.USER_FIELD);
+            JsonNode userJson = jsonNode.get(FieldConstants.USER_FIELD);
             userService.getUser(userJson, headerReqId);
         } catch (Exception e) {
             log.error(ErrorMessageConstants.ERROR_GET_USER_FAIL, e);

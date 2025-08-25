@@ -14,6 +14,8 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.choicespecs.e_commerce_proj_user_service.constants.ErrorMessageConstants;
+import com.choicespecs.e_commerce_proj_user_service.constants.FieldConstants;
 import com.choicespecs.e_commerce_proj_user_service.dto.UserRequest;
 import com.choicespecs.e_commerce_proj_user_service.entity.UserEntity;
 
@@ -53,22 +55,22 @@ public class UserJdbcRepository {
         int selectors = 0;
         if (notBlank(request.getUsername())) {
             sql.append(" AND LOWER(username) = :username");
-            p.put("username", request.getUsername().toLowerCase());
+            p.put(FieldConstants.USER_USERNAME_FIELD, request.getUsername().toLowerCase());
             selectors++;
         }
         if (notBlank(request.getEmail())) {
             sql.append(" AND LOWER(email) = :email");
-            p.put("email", request.getEmail().toLowerCase());
+            p.put(FieldConstants.USER_EMAIL_FIELD, request.getEmail().toLowerCase());
             selectors++;
         }
 
         if (notBlank(request.getPhone())) {
             sql.append(" AND phone = :phone");
-            p.put("phone", request.getPhone());
+            p.put(FieldConstants.USER_PHONE_FIELD, request.getPhone());
             selectors++;
         }
 
-        if (selectors != 1) throw new IllegalArgumentException("Provide exactly one selector");
+        if (selectors != 1) throw new IllegalArgumentException(ErrorMessageConstants.ERROR_MORE_THAN_ONE_SELECTOR);
         sql.append(" LIMIT 1");
         List<UserEntity> list = jdbc.query(sql.toString(), p, rowMapper());
         return list.isEmpty() ? Optional.empty() : Optional.of(list.get(0));
