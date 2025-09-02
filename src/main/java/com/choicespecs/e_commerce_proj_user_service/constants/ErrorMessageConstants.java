@@ -11,7 +11,7 @@ package com.choicespecs.e_commerce_proj_user_service.constants;
  */
 public class ErrorMessageConstants {
 
-    public ErrorMessageConstants() {}
+    private ErrorMessageConstants() {}
 
     public static final String ERROR_MISSING_FIELD = "Missing required fields in message";
     public static final String ERROR_MISSING_HEADER = "Missing required header in message";
@@ -20,6 +20,7 @@ public class ErrorMessageConstants {
     public static final String ERROR_DELETE_USER_FAIL = "Failed to delete user";
     public static final String ERROR_UPDATE_USER_FAIL = "Failed to update user";
     public static final String ERROR_GET_USER_FAIL = "Failed to get user";
+    public static final String ERROR_SEARCH_USER_FAIL = "Failed to search user";
     public static final String ERROR_UNSUPPORTED_ACTION = "Unsupported action: ";
 
 

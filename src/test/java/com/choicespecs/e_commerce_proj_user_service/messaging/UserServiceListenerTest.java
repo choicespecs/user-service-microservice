@@ -13,6 +13,7 @@ import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.choicespecs.e_commerce_proj_user_service.constants.FieldConstants;
+import com.choicespecs.e_commerce_proj_user_service.dto.UserRequest;
 import com.choicespecs.e_commerce_proj_user_service.model.User;
 import com.choicespecs.e_commerce_proj_user_service.service.UserService;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -88,12 +89,13 @@ class UserServiceListenerTest {
             JsonNode payload = REAL.createObjectNode()
                     .put(FieldConstants.ACTION_FIELD, "UPDATE")
                     .set(FieldConstants.USER_FIELD, userJson);
+            UserRequest request = objectMapper.treeToValue(userJson, UserRequest.class);
 
             // when
             listener.receiveMessage(payload, "req-3");
 
             // then
-            verify(userService).updateUser("alice", userJson);
+            verify(userService).updateUser("alice", request);
             verifyNoMoreInteractions(userService);
         }
 
@@ -104,12 +106,13 @@ class UserServiceListenerTest {
             JsonNode payload = REAL.createObjectNode()
                     .put(FieldConstants.ACTION_FIELD, "GET")
                     .set(FieldConstants.USER_FIELD, userJson);
+            UserRequest request = objectMapper.treeToValue(userJson, UserRequest.class);
 
             // when
             listener.receiveMessage(payload, "req-123");
 
             // then
-            verify(userService).getUser(userJson, "req-123");
+            verify(userService).getUser(request, "req-123");
             verifyNoMoreInteractions(userService);
         }
     }

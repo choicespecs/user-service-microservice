@@ -53,6 +53,39 @@ curl -u guest:guest -X POST \
 
 
 
+curl -u guest:guest -X POST \
+  http://localhost:15672/api/exchanges/%2F/user.exchange/publish \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "routing_key": "user.search",
+    "payload": "{\"action\":\"SEARCH\",\"q\":\"john\",\"page\":0,\"size\":10,\"sortBy\":\"username\",\"sortDir\":\"asc\",\"includeDeleted\":false}",
+    "payload_encoding": "string",
+    "properties": {
+      "content_type": "application/json",
+      "headers": {
+        "x-request-id": "req-search-001"
+      }
+    }
+  }'
+
+
+curl -u guest:guest -X POST \
+  http://localhost:15672/api/exchanges/%2F/user.exchange/publish \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "routing_key": "user.search",
+    "payload": "{\"action\":\"SEARCH\",\"user\":{\"email\":\"john@example.com\"},\"page\":0,\"size\":10,\"sortBy\":\"username\",\"sortDir\":\"asc\",\"includeDeleted\":false}",
+    "payload_encoding": "string",
+    "properties": {
+      "content_type": "application/json",
+      "headers": {
+        "x-request-id": "req-search-001"
+      }
+    }
+  }'
+
+
+
  we can debug events using this 
 
 # create

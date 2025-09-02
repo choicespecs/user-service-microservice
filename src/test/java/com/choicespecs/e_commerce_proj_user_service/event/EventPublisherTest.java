@@ -23,7 +23,9 @@ import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
+import com.choicespecs.e_commerce_proj_user_service.constants.ErrorMessageConstants;
 import com.choicespecs.e_commerce_proj_user_service.constants.FieldConstants;
+import com.choicespecs.e_commerce_proj_user_service.constants.RabbitMQConstants;
 import com.choicespecs.e_commerce_proj_user_service.entity.UserEntity;
 import com.choicespecs.e_commerce_proj_user_service.model.ActionType;
 
@@ -32,12 +34,6 @@ import com.choicespecs.e_commerce_proj_user_service.model.ActionType;
  */
 @ExtendWith(MockitoExtension.class)
 public class EventPublisherTest {
-
-    private static final String EXCHANGE = "user.exchange";
-    private static final String RK_CREATED = "user.created";
-    private static final String RK_DELETED = "user.deleted";
-    private static final String RK_UPDATED = "user.updated";
-    private static final String RK_GET = "user.get";
 
     @Mock
     RabbitTemplate rabbitTemplate;
@@ -65,28 +61,28 @@ public class EventPublisherTest {
         void routesCreate() {
             Object payload = new Object();
             publisher.publishUserEvent(ActionType.CREATE.name(), payload);
-            verify(rabbitTemplate).convertAndSend(EXCHANGE, RK_CREATED, payload);
+            verify(rabbitTemplate).convertAndSend(RabbitMQConstants.USER_EXCHANGE, RabbitMQConstants.USER_CREATED_ROUTING_KEY, payload);
         }
 
         @Test
         void routesDelete() {
             Object payload = new Object();
             publisher.publishUserEvent(ActionType.DELETE.name(), payload);
-            verify(rabbitTemplate).convertAndSend(EXCHANGE, RK_DELETED, payload);
+            verify(rabbitTemplate).convertAndSend(RabbitMQConstants.USER_EXCHANGE, RabbitMQConstants.USER_DELETED_ROUTING_KEY, payload);
         }
 
         @Test
         void routesUpdate() {
             Object payload = new Object();
             publisher.publishUserEvent(ActionType.UPDATE.name(), payload);
-            verify(rabbitTemplate).convertAndSend(EXCHANGE, RK_UPDATED, payload);
+            verify(rabbitTemplate).convertAndSend(RabbitMQConstants.USER_EXCHANGE, RabbitMQConstants.USER_UPDATED_ROUTING_KEY, payload);
         }
 
         @Test
         void routesGet() {
             Object payload = new Object();
             publisher.publishUserEvent(ActionType.GET.name(), payload);
-            verify(rabbitTemplate).convertAndSend(EXCHANGE, RK_GET, payload);
+            verify(rabbitTemplate).convertAndSend(RabbitMQConstants.USER_EXCHANGE, RabbitMQConstants.USER_READ_ROUTING_KEY, payload);
         }
 
         @Test
@@ -94,7 +90,7 @@ public class EventPublisherTest {
             String bad = "NOPE";
             assertThatThrownBy(() -> publisher.publishUserEvent(bad, new Object()))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Invalid ActionType") // from ActionType.fromString
+                .hasMessageContaining(ErrorMessageConstants.ERROR_INVALID_ACTION_TYPE) // from ActionType.fromString
                 .hasMessageContaining(bad);
         }
     }
@@ -109,7 +105,7 @@ public class EventPublisherTest {
 
             publisher.publishUserCreatedEvent(user);
 
-            verify(rabbitTemplate).convertAndSend(eq(EXCHANGE), eq(RK_CREATED), payloadCaptor.capture());
+            verify(rabbitTemplate).convertAndSend(eq(RabbitMQConstants.USER_EXCHANGE), eq(RabbitMQConstants.USER_CREATED_ROUTING_KEY), payloadCaptor.capture());
             assertThat(payloadCaptor.getValue()).isInstanceOf(UserServiceCreatedEvent.class);
         }
 
@@ -119,7 +115,7 @@ public class EventPublisherTest {
 
             publisher.publishUserDeletedEvent(user);
 
-            verify(rabbitTemplate).convertAndSend(eq(EXCHANGE), eq(RK_DELETED), payloadCaptor.capture());
+            verify(rabbitTemplate).convertAndSend(eq(RabbitMQConstants.USER_EXCHANGE), eq(RabbitMQConstants.USER_DELETED_ROUTING_KEY), payloadCaptor.capture());
             assertThat(payloadCaptor.getValue()).isInstanceOf(UserServiceDeletedEvent.class);
         }
 
@@ -129,7 +125,7 @@ public class EventPublisherTest {
 
             publisher.publishUserUpdatedEvent(user);
 
-            verify(rabbitTemplate).convertAndSend(eq(EXCHANGE), eq(RK_UPDATED), payloadCaptor.capture());
+            verify(rabbitTemplate).convertAndSend(eq(RabbitMQConstants.USER_EXCHANGE), eq(RabbitMQConstants.USER_UPDATED_ROUTING_KEY), payloadCaptor.capture());
             assertThat(payloadCaptor.getValue()).isInstanceOf(UserServiceUpdatedEvent.class);
         }
 
@@ -140,7 +136,7 @@ public class EventPublisherTest {
 
             publisher.publishUserReadEvent(requestId, user);
 
-            verify(rabbitTemplate).convertAndSend(eq(EXCHANGE), eq(RK_GET), payloadCaptor.capture(), mppCaptor.capture());
+            verify(rabbitTemplate).convertAndSend(eq(RabbitMQConstants.USER_EXCHANGE), eq(RabbitMQConstants.USER_READ_ROUTING_KEY), payloadCaptor.capture(), mppCaptor.capture());
             assertThat(payloadCaptor.getValue()).isInstanceOf(UserServiceGetEvent.class);
 
             // Apply the captured MPP and validate headers/content-type
@@ -160,7 +156,7 @@ public class EventPublisherTest {
 
             publisher.publishUserGetNotFound(requestId);
 
-            verify(rabbitTemplate).convertAndSend(eq(EXCHANGE), eq(RK_GET), payloadCaptor.capture(), mppCaptor.capture());
+            verify(rabbitTemplate).convertAndSend(eq(RabbitMQConstants.USER_EXCHANGE), eq(RabbitMQConstants.USER_READ_ROUTING_KEY), payloadCaptor.capture(), mppCaptor.capture());
             assertThat(payloadCaptor.getValue()).isInstanceOf(UserServiceGetEvent.class);
 
             MessageProperties props = new MessageProperties();
@@ -182,7 +178,7 @@ public class EventPublisherTest {
 
             publisher.publishUserGetError(requestId, errorMessage);
 
-            verify(rabbitTemplate).convertAndSend(eq(EXCHANGE), eq(RK_GET), payloadCaptor.capture(), mppCaptor.capture());
+            verify(rabbitTemplate).convertAndSend(eq(RabbitMQConstants.USER_EXCHANGE), eq(RabbitMQConstants.USER_READ_ROUTING_KEY), payloadCaptor.capture(), mppCaptor.capture());
             assertThat(payloadCaptor.getValue()).isInstanceOf(UserServiceGetEvent.class);
 
             MessageProperties props = new MessageProperties();

@@ -14,6 +14,9 @@ import org.springframework.stereotype.Component;
 
 import com.choicespecs.e_commerce_proj_user_service.constants.ErrorMessageConstants;
 import com.choicespecs.e_commerce_proj_user_service.constants.FieldConstants;
+import com.choicespecs.e_commerce_proj_user_service.constants.RabbitMQConstants;
+import com.choicespecs.e_commerce_proj_user_service.dto.UserRequest;
+import com.choicespecs.e_commerce_proj_user_service.dto.UserSearchRequest;
 import com.choicespecs.e_commerce_proj_user_service.model.ActionType;
 import com.choicespecs.e_commerce_proj_user_service.model.User;
 import com.choicespecs.e_commerce_proj_user_service.service.UserService;
@@ -28,7 +31,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class UserServiceListener {
 
     private static final Logger log = LoggerFactory.getLogger(UserServiceListener.class);
-    private static final String USER_QUEUE = "user-service-queue";
 
 
     @Autowired
@@ -37,7 +39,7 @@ public class UserServiceListener {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @RabbitListener(queues = USER_QUEUE)
+    @RabbitListener(queues = RabbitMQConstants.USER_QUEUE)
     public void receiveMessage(JsonNode jsonNode,
                                @Header(name=FieldConstants.HEADER_REQUEST_ID_FIELD, required=false) String requestId) {
         try {
@@ -59,6 +61,10 @@ public class UserServiceListener {
                 case GET:
                     getUser(jsonNode, requestId);
                     break;
+                case SEARCH:
+                    searchUser(jsonNode, requestId);
+                    break;
+
             }
         } catch (Exception e) {
             log.error(ErrorMessageConstants.ERROR_PROCESSING_FAIL, e);
@@ -101,8 +107,9 @@ public class UserServiceListener {
                 throw new IllegalArgumentException(ErrorMessageConstants.ERROR_MISSING_FIELD);
             }
             JsonNode userJson = jsonNode.get(FieldConstants.USER_FIELD);
+            UserRequest request = objectMapper.treeToValue(userJson, UserRequest.class);
             String username = requireText(userJson, FieldConstants.USERNAME_FIELD);
-            userService.updateUser(username, userJson);
+            userService.updateUser(username, request);
         } catch (Exception e) {
             log.error(ErrorMessageConstants.ERROR_UPDATE_USER_FAIL, e);
         }
@@ -117,9 +124,22 @@ public class UserServiceListener {
                 throw new IllegalArgumentException(ErrorMessageConstants.ERROR_MISSING_FIELD);
             }
             JsonNode userJson = jsonNode.get(FieldConstants.USER_FIELD);
-            userService.getUser(userJson, headerReqId);
+            UserRequest request = objectMapper.treeToValue(userJson, UserRequest.class);
+            userService.getUser(request, headerReqId);
         } catch (Exception e) {
             log.error(ErrorMessageConstants.ERROR_GET_USER_FAIL, e);
+        }
+    }
+
+    private void searchUser(JsonNode jsonNode, String headerReqId) {
+        try {
+            if (headerReqId == null || headerReqId.isBlank()) {
+                throw new IllegalArgumentException(ErrorMessageConstants.ERROR_MISSING_HEADER);
+            }
+            UserSearchRequest userSearchRequest = objectMapper.treeToValue(jsonNode, UserSearchRequest.class);
+            userService.searchUser(userSearchRequest, headerReqId);
+        } catch (Exception e) {
+            log.error(ErrorMessageConstants.ERROR_SEARCH_USER_FAIL, e);
         }
     }
 
