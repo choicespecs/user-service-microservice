@@ -1,8 +1,6 @@
 # User Service Microservice
 just a sample for learning
 
-./build.sh
-
 podman compose up --build
 
 curl -u guest:guest -X POST \
