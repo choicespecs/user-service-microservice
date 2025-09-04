@@ -1,12 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
 package com.choicespecs.e_commerce_proj_user_service.dto;
 
 /**
- *
+ * This is used within {@link UserSearchRequest}
+ * In the search request, this is just used to keep the filter for search query
+ * specifically as it related to the User
  * @author christopherlee
  */
 public class UserFilter {

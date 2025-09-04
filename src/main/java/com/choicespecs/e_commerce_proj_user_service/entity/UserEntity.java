@@ -1,10 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
 package com.choicespecs.e_commerce_proj_user_service.entity;
-
 import java.time.Instant;
 import java.util.UUID;
 
@@ -14,8 +8,7 @@ import org.springframework.data.relational.core.mapping.Table;
 import com.choicespecs.e_commerce_proj_user_service.model.User;
 
 /**
- *
- * @author christopherlee
+ * Entity used for database and for User
  */
 @Table("users")
 public class UserEntity {

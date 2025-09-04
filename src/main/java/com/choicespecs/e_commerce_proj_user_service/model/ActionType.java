@@ -1,15 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Enum.java to edit this template
- */
 
 package com.choicespecs.e_commerce_proj_user_service.model;
-
 import com.choicespecs.e_commerce_proj_user_service.constants.ErrorMessageConstants;
 
 /**
- *
- * @author christopherlee
+ * Enum for the different actions that the User Service Microservice can take 
  */
 public enum ActionType {
     CREATE, UPDATE, DELETE, GET, SEARCH;

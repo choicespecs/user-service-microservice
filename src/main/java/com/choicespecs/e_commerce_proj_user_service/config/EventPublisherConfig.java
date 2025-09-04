@@ -1,10 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
 package com.choicespecs.e_commerce_proj_user_service.config;
-
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,8 +6,9 @@ import org.springframework.context.annotation.Configuration;
 import com.choicespecs.e_commerce_proj_user_service.event.EventPublisher;
 
 /**
- *
- * @author christopherlee
+ * This class configures the {@link EventPublisher} class to bean factory. 
+ * This will wrap around the {@link RabbitTemplate} 
+ * to make publishing events easier.
  */
 @Configuration
 public class EventPublisherConfig {
