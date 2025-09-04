@@ -6,8 +6,7 @@
 package com.choicespecs.e_commerce_proj_user_service.constants;
 
 /**
- *
- * @author christopherlee
+ * Constants for Error Messages within UserServiceMicroservice
  */
 public class ErrorMessageConstants {
 
@@ -22,10 +21,7 @@ public class ErrorMessageConstants {
     public static final String ERROR_GET_USER_FAIL = "Failed to get user";
     public static final String ERROR_SEARCH_USER_FAIL = "Failed to search user";
     public static final String ERROR_UNSUPPORTED_ACTION = "Unsupported action: ";
-
-
     public static final String ERROR_ACTION_TYPE_NULL = "ActionType cannot be null or blank";
     public static final String ERROR_INVALID_ACTION_TYPE = "Invalid ActionType: ";
-
     public static final String ERROR_MORE_THAN_ONE_SELECTOR = "Provide exactly one selector";
 }

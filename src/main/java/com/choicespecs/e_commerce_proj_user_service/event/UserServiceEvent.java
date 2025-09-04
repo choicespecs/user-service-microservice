@@ -1,18 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 
 package com.choicespecs.e_commerce_proj_user_service.event;
-
 import java.time.Instant;
 import java.util.UUID;
 
 import com.choicespecs.e_commerce_proj_user_service.entity.UserEntity;
 
 /**
- *
- * @author christopherlee
+ * Abstract class for events that are published
+ * All events should inherit from this
  */
 public abstract class UserServiceEvent {
     private UUID eventId;
